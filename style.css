@@ -1,0 +1,486 @@
+/* ==========================================================================
+   Base resets & variables
+   ========================================================================== */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --color-bg: #000000;
+    --color-text: #ffffff;
+    --color-text-muted: rgba(255, 255, 255, 0.4);
+    --color-text-dim: rgba(255, 255, 255, 0.15);
+    --color-border: rgba(255, 255, 255, 0.1);
+    --color-border-hover: rgba(255, 255, 255, 0.25);
+    --font-serif: 'Playfair Display', Georgia, serif;
+    --font-sans: 'Plus Jakarta Sans', Helvetica, Arial, sans-serif;
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html {
+    scroll-behavior: initial; /* Let GSAP handle scrolling */
+}
+
+body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ==========================================================================
+   Layout Structures
+   ========================================================================== */
+.scroll-container {
+    width: 100%;
+    position: relative;
+}
+
+.section {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+
+/* ==========================================================================
+   Hero Section
+   ========================================================================== */
+.hero-section {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 2rem;
+    z-index: 2;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-title {
+    font-family: var(--font-serif);
+    font-size: clamp(3rem, 7.5vw, 9.5rem);
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    text-transform: lowercase;
+    color: var(--color-text);
+    will-change: transform, opacity;
+}
+
+.hero-subtitle {
+    font-size: clamp(0.75rem, 1vw, 0.9rem);
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: var(--color-text-muted);
+    margin-top: 2rem;
+    font-weight: 400;
+}
+
+.scroll-indicator {
+    margin-top: 4rem;
+    height: 60px;
+    width: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.indicator-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, var(--color-text), transparent);
+    animation: scrollScroll 2.2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+    transform-origin: top;
+}
+
+@keyframes scrollScroll {
+    0% { transform: scaleY(0); transform-origin: top; }
+    50% { transform: scaleY(1); transform-origin: top; }
+    51% { transform: scaleY(1); transform-origin: bottom; }
+    100% { transform: scaleY(0); transform-origin: bottom; }
+}
+
+/* ==========================================================================
+   Gallery Section
+   ========================================================================== */
+.gallery-section {
+    min-height: 110vh;
+    padding: 12vh 6vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    background-color: var(--color-bg);
+}
+
+.gallery-header {
+    margin-bottom: 8vh;
+    text-align: left;
+}
+
+.gallery-tag {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    color: var(--color-text-muted);
+    display: inline-block;
+    margin-bottom: 0.75rem;
+}
+
+.gallery-title {
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 4vw, 4.5rem);
+    font-weight: 300;
+    letter-spacing: -0.01em;
+}
+
+.gallery-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 2.5vw;
+    width: 100%;
+    position: relative;
+    /* Extra spacing at the bottom to ensure images don't clip while swinging */
+    padding-bottom: 15vh; 
+}
+
+/* ==========================================================================
+   Pendulum Hanging items
+   ========================================================================== */
+.hanging-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    flex: 1;
+    min-width: 200px;
+    max-width: 320px;
+    
+    /* Crucial pendulum rotation logic */
+    transform-origin: top center;
+    animation: sway ease-in-out infinite alternate;
+    will-change: transform;
+}
+
+/* Suspension string */
+.string {
+    width: 1px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.3) 100%);
+    position: relative;
+}
+
+/* Stagger string lengths to offset vertical alignments */
+#item-1 .string { height: 180px; }
+#item-2 .string { height: 290px; }
+#item-3 .string { height: 130px; }
+#item-4 .string { height: 220px; }
+
+/* Image container with dark gray fallback background */
+.image-card {
+    background: #1a1a1a;
+    border: 1px solid var(--color-border);
+    padding: 14px;
+    border-radius: 4px;
+    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8), 0 0 60px rgba(255, 255, 255, 0.01);
+    transition: border-color 0.4s var(--ease-out-expo), box-shadow 0.4s var(--ease-out-expo);
+    width: 100%;
+}
+
+.image-card:hover {
+    border-color: var(--color-border-hover);
+    box-shadow: 0 45px 90px rgba(0, 0, 0, 0.9), 0 0 80px rgba(255, 255, 255, 0.02);
+}
+
+.image-card img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    border-radius: 2px;
+    filter: grayscale(15%) contrast(105%);
+    transition: transform 0.8s var(--ease-out-expo), filter 0.8s var(--ease-out-expo);
+    display: block;
+}
+
+.image-card:hover img {
+    transform: scale(1.025);
+    filter: grayscale(0%) contrast(100%);
+}
+
+.card-caption {
+    margin-top: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 12px;
+}
+
+.caption-num {
+    color: var(--color-text-muted);
+    font-weight: 300;
+}
+
+.caption-text {
+    color: rgba(255, 255, 255, 0.85);
+    text-transform: uppercase;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+}
+
+/* ==========================================================================
+   Staggered Swing Animations
+   ========================================================================== */
+#item-1 {
+    animation-name: sway-slow;
+    animation-duration: 6.4s;
+    animation-delay: 0s;
+}
+
+#item-2 {
+    animation-name: sway-medium;
+    animation-duration: 7.2s;
+    animation-delay: -1.8s; /* Negative delay keeps it active from page load */
+}
+
+#item-3 {
+    animation-name: sway-fast;
+    animation-duration: 5.6s;
+    animation-delay: -3.5s;
+}
+
+#item-4 {
+    animation-name: sway-medium;
+    animation-duration: 6.8s;
+    animation-delay: -5.1s;
+}
+
+/* Gentle sway variations between 1.2 and 1.8 degrees */
+@keyframes sway-slow {
+    0% { transform: rotate(-1.2deg); }
+    100% { transform: rotate(1.2deg); }
+}
+
+@keyframes sway-medium {
+    0% { transform: rotate(-1.5deg); }
+    100% { transform: rotate(1.5deg); }
+}
+
+@keyframes sway-fast {
+    0% { transform: rotate(-1.8deg); }
+    100% { transform: rotate(1.8deg); }
+}
+
+/* ==========================================================================
+   Floating Leaf Section
+   ========================================================================== */
+.water-container {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    /* Using a more vibrant transition */
+    background: linear-gradient(135deg, #000000, #0c1a3d, #000000);
+    background-size: 300% 300%;
+    animation: gradient-flow 10s ease infinite;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden; /* Prevent leaf from causing scrollbars when off-screen */
+    border-top: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+.leaf-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.floating-leaf {
+    position: absolute;
+    width: 300px;
+    height: auto;
+    left: -320px;
+    z-index: 10;
+    transform-origin: center center;
+    animation: drift 20s linear infinite;
+    pointer-events: none;
+    filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.65)) opacity(0.85);
+}
+
+/*
+   Drift Physics Animation:
+   Moves the leaf from left: -320px to 100vw while simulating
+   a natural water-like bobbing (vertical drift and subtle rotation)
+*/
+@keyframes drift {
+    0% {
+        left: -320px;
+        transform: translateY(0px) rotate(0deg);
+    }
+    10% {
+        transform: translateY(-8px) rotate(5deg);
+    }
+    20% {
+        transform: translateY(4px) rotate(-3deg);
+    }
+    30% {
+        transform: translateY(-12px) rotate(8deg);
+    }
+    40% {
+        transform: translateY(2px) rotate(-2deg);
+    }
+    50% {
+        transform: translateY(-10px) rotate(6deg);
+    }
+    65% {
+        transform: translateY(6px) rotate(-4deg);
+    }
+    80% {
+        transform: translateY(-8px) rotate(7deg);
+    }
+    90% {
+        transform: translateY(3px) rotate(-3deg);
+    }
+    100% {
+        left: 100vw;
+        transform: translateY(0px) rotate(0deg);
+    }
+}
+
+/* Moving water background shift */
+@keyframes gradient-flow {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* ==========================================================================
+   Pinterest Gallery Grid
+   ========================================================================== */
+.pinterest-section {
+    padding: 12vh 6vw;
+    background-color: var(--color-bg);
+}
+
+.gallery-grid {
+    display: grid;
+    /* Стабильная сетка: минимум 250px на колонку, растягиваются равномерно */
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px; /* Четкие отступы */
+    padding: 40px;
+    width: 95%;
+    margin: 0 auto;
+    background-color: #000000; /* Фон под сеткой черный */
+}
+
+.gallery-grid .grid-item {
+    /* Обеспечиваем квадратную форму плитки для эстетики */
+    aspect-ratio: 1 / 1; 
+    overflow: hidden;
+    border-radius: 12px;
+    /* Тень для глубины (эффект пина) */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); 
+    transition: transform 0.3s ease;
+}
+
+.gallery-grid .grid-item:hover {
+    /* Легкий эффект приближения при наведении */
+    transform: scale(1.03); 
+}
+
+.gallery-grid .grid-item img {
+    width: 100%;
+    height: 100%;
+    /* Важно: чтобы фото не сплющивались, а заполняли блок */
+    object-fit: cover; 
+    display: block;
+}
+
+.gallery-grid .poem-grid-item {
+    aspect-ratio: 1 / 1;
+    background-color: #000000;
+    border: 1px solid #ffffff; /* тонкая белая рамка */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    color: #ffffff; /* белый текст */
+    text-align: center;
+    font-family: 'Georgia', serif; /* элегантный шрифт */
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+}
+
+.gallery-grid .poem-grid-item:hover {
+    transform: scale(1.03);
+}
+
+/* ==========================================================================
+   Responsive adjustments
+   ========================================================================== */
+@media (max-width: 1024px) {
+    .gallery-container {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 6vh 4vw;
+    }
+    
+    .hanging-item {
+        max-width: 280px;
+        flex: 0 0 45%;
+    }
+    
+    #item-1 .string { height: 120px; }
+    #item-2 .string { height: 180px; }
+    #item-3 .string { height: 100px; }
+    #item-4 .string { height: 150px; }
+
+}
+
+@media (max-width: 600px) {
+    .gallery-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 8vh;
+    }
+    
+    .hanging-item {
+        max-width: 320px;
+        flex: 1 1 100%;
+    }
+
+    #item-1 .string { height: 100px; }
+    #item-2 .string { height: 140px; }
+    #item-3 .string { height: 80px; }
+    #item-4 .string { height: 110px; }
+
+}
